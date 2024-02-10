@@ -33,12 +33,37 @@ $(document).ready(function() {
     });
 
     $('.next').click(function() {
-        showNextSlide();
+        showPreviousSlide();
     });
 
     $('.prev').click(function() {
-        showPreviousSlide();
+        showNextSlide();
     });
+
+    // Swipe gesture handling
+    var touchstartX = 0;
+    var touchendX = 0;
+
+    document.querySelector('.slider-container').addEventListener('touchstart', function(event) {
+        touchstartX = event.changedTouches[0].screenX;
+    }, false);
+
+    document.querySelector('.slider-container').addEventListener('touchend', function(event) {
+        touchendX = event.changedTouches[0].screenX;
+        handleGesture();
+    }, false);
+
+    function handleGesture() {
+        if (touchendX < touchstartX) {
+        // Swiped left
+        showNextSlide();
+        }
+
+        if (touchendX > touchstartX) {
+        // Swiped right
+        showPreviousSlide();
+        }
+    }
 
     function currentDate() {
         var current_date = new Date();
