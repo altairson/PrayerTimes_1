@@ -7,6 +7,7 @@ $(document).ready(function() {
     var SLIDE_INDEX = 0;
     var SLIDES = $(".slide");
     var TOTAL_SLIDES = SLIDES.length;
+    const minimalSwipeDistance = 50;
 
 
     SLIDES[SLIDE_INDEX].classList.add("active-slide");
@@ -23,15 +24,6 @@ $(document).ready(function() {
         SLIDES[SLIDE_INDEX].classList.add("active-slide");
     }
 
-    // Swipe gesture handling
-    $('.slider-container').on('swipeleft', function() {
-        showNextSlide();
-    });
-
-    $('.slider-container').on('swiperight', function() {
-        showPreviousSlide();
-    });
-
     $('.next').click(function() {
         showPreviousSlide();
     });
@@ -45,23 +37,26 @@ $(document).ready(function() {
     var touchendX = 0;
 
     document.querySelector('.slider-container').addEventListener('touchstart', function(event) {
+        console.log("touch");
         touchstartX = event.changedTouches[0].screenX;
     }, false);
 
     document.querySelector('.slider-container').addEventListener('touchend', function(event) {
+        console.log("touch");
         touchendX = event.changedTouches[0].screenX;
         handleGesture();
     }, false);
 
     function handleGesture() {
+        var distance = touchendX - touchstartX;
+        if (Math.abs(distance) > minimalSwipeDistance) {
         if (touchendX < touchstartX) {
-        // Swiped left
-        showNextSlide();
+            // Swiped left
+            showNextSlide();
+        } else {
+            // Swiped right
+            showPreviousSlide();
         }
-
-        if (touchendX > touchstartX) {
-        // Swiped right
-        showPreviousSlide();
         }
     }
 
@@ -145,8 +140,9 @@ $(document).ready(function() {
     }
 
     $(".month").click(function() {
+        console.log("click");
         if(SLIDE_INDEX != 0) {
-            showPreviousSlide();
+            showNextSlide();
         }
         $(".header")[0].innerText = $(this)[0].innerText;
 
