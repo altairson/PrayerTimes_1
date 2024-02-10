@@ -21,7 +21,7 @@
 body {
     width: 100vw;
     height: 100vh;
-    /* background-image: url(../media/mosque_croped.png); */
+    background-image: url(../media/mosque_croped.png);
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -32,7 +32,8 @@ body {
 
 
 .current-month {
-    background-color: green !important;
+    background-color: #008000ab !important;
+    color: white;
 }
 
 .current-day td {
@@ -40,17 +41,17 @@ body {
 }
 .content table th {
     color: white;
+    text-shadow: 0 0 black;
 }
 .content table td {
-    border: 1px solid #333;
     padding: 2px 10px;
-    background-color: white;
+    background-color: #ffffff94;
+    text-shadow: 0 0 black;
 }
 
 #main {
     height: 100%;
     width: 100%;
-    border: 1px solid red;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -61,7 +62,6 @@ body {
 #month {
     height: 100%;
     width: 100%;
-    border: 1px solid red;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -71,7 +71,6 @@ body {
 
 .month {
     width: 40%;
-    border: 1px solid #333;
     height: 50px;
     display: flex;
     flex-direction: row;
@@ -80,7 +79,7 @@ body {
     border-radius: 5px;
     margin-bottom: 10px;
     cursor: pointer;
-    background-color: white;
+    background-color: #ffffffc2;
 }
 
 .month:hover {
@@ -91,7 +90,6 @@ body {
 .content {
     width: 100%;
     height: calc(100% - 50px);
-    border: 1px solid blue;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -101,11 +99,12 @@ body {
 .header {
     width: 100%;
     height: 50px;
-    border: 1px solid gray;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    font-weight: bold;
+    color: green;
 }
 
 #day {
@@ -120,13 +119,13 @@ body {
 .prayer {
     width: 70%;
     height: fit-content;
-    background-color: white;
+    background-color: #ffffffba;
     box-shadow: 0px 0px 10px 2px #333;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 5px;
+    border-radius: 3px;
     margin-bottom: 20px;
     padding: 10px;
 }
@@ -165,4 +164,55 @@ body {
 }
 
 
+#note {
+    display: flex;
+    height: 30px;
+    padding: 30px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px 5px black;
+}
+
+.next-prayer {
+    box-shadow: 0px 0px 10px 5px greenyellow;
+}
+
+
+.slider-container {
+    width: 100%;
+    height: calc(100% - 50px);
+    overflow: hidden; 
+  }
+  
+  .slide {
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+  
+  .active-slide {
+    display: block;
+  }
+
+  .navigation {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  .navigation button {
+    width: 100px;
+    height: 30px;
+    background-color: #00b0f7de;
+    border: none;
+    box-shadow: 0px 0px 10px 2px #333;
+    color: white;
+    font-weight: bold;
+  }
 

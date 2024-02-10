@@ -4,6 +4,42 @@ $(document).ready(function() {
     const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November" ,"December"];
     var CURRENT_MONTH = [];
 
+    var SLIDE_INDEX = 0;
+    var SLIDES = $(".slide");
+    var TOTAL_SLIDES = SLIDES.length;
+
+
+    SLIDES[SLIDE_INDEX].classList.add("active-slide");
+
+    function showNextSlide() {
+        SLIDES[SLIDE_INDEX].classList.remove("active-slide");
+        SLIDE_INDEX = (SLIDE_INDEX + 1) % TOTAL_SLIDES;
+        SLIDES[SLIDE_INDEX].classList.add("active-slide");
+    }
+
+    function showPreviousSlide() {
+        SLIDES[SLIDE_INDEX].classList.remove("active-slide");
+        SLIDE_INDEX = (SLIDE_INDEX - 1 + TOTAL_SLIDES) % TOTAL_SLIDES;
+        SLIDES[SLIDE_INDEX].classList.add("active-slide");
+    }
+
+    // Swipe gesture handling
+    $('.slider-container').on('swipeleft', function() {
+        showNextSlide();
+    });
+
+    $('.slider-container').on('swiperight', function() {
+        showPreviousSlide();
+    });
+
+    $('.next').click(function() {
+        showNextSlide();
+    });
+
+    $('.prev').click(function() {
+        showPreviousSlide();
+    });
+
     function currentDate() {
         var current_date = new Date();
         var month_index = current_date.getMonth();
@@ -20,7 +56,7 @@ $(document).ready(function() {
             $(".current-month").removeClass("current-month");
         }
         $(".month")[month_index].classList.add("current-month");
-        
+        $(".month")[month_index].click();
     }
 
     
@@ -31,7 +67,7 @@ $(document).ready(function() {
         let minutes = dt.getMinutes();
         let number = (parseInt(hour) * 60) + (parseInt(minutes));
 
-        let index = 0;
+        let index = -1;
         for(let i = 0; i < 5; i++) {
             let hr = today_times[i].split(":")[0];
             let mt = today_times[i].split(":")[1];
@@ -42,7 +78,13 @@ $(document).ready(function() {
                 break;
             }
         }
-        countdown(index, today_times, number);
+        if(index != -1) {
+            countdown(index, today_times, number);
+            $("#note").addClass("hidden");
+        }
+        else {
+            $("#note").removeClass("hidden");
+        }
     }
 
     function countdown(index, today_times) {
@@ -51,7 +93,7 @@ $(document).ready(function() {
             let hour = dt.getHours();
             let minutes = dt.getMinutes();
             let number = (parseInt(hour) * 60) + (parseInt(minutes));
-
+            debugger
             let target_div = $(".empty")[index];
             target_div.innerHTML = "";
             target_div.classList.add("target-div");
@@ -64,7 +106,11 @@ $(document).ready(function() {
             let nr = (parseInt(hr) * 60) + (parseInt(mt));
             let difference = nr - number;
             let seconds = dt.getSeconds();
-            div.innerText = parseInt(difference / 60) + "h " + (difference % 60) + " m " + (60 - seconds) + " s";
+            div.innerText = parseInt(difference / 60) + "h " + (difference % 60) + "m " + (60 - seconds) + "s";
+            if($(".next-prayer")[0] != undefined) {
+                $(".next-prayer").removeClass("next-prayer");
+            }
+            $(".prayer")[index].classList.add("next-prayer");
             $(".target-div").append(div);
             if(nr < number) {
                 clearInterval(x);
@@ -72,33 +118,11 @@ $(document).ready(function() {
             }
         }, 1000);
     }
-    
-
-    function findMonthData(index) {
-        let next_index = index == 12 ? 1 : index + 1;
-        let month_array = [];
-        let month = MONTHS[index];
-        let next_month = MONTHS[next_index];
-        var start_index = 0;
-        var end_index = 0;
-        for(let i = 1; i < DATA.length; i++) {
-            if(DATA[i - 1][0] == month) {
-                start_index = i + 1;
-                
-            }
-            if(DATA[i - 1][0] == next_month) {
-                end_index = i - 2;
-            }
-        }
-        for(j = start_index; j <= end_index; j++) {
-            month_array.push(DATA[j]);
-        }
-        return month_array;
-    }
 
     $(".month").click(function() {
-        $("#main").addClass("hidden");
-        $("#month").removeClass("hidden");
+        if(SLIDE_INDEX != 0) {
+            showPreviousSlide();
+        }
         $(".header")[0].innerText = $(this)[0].innerText;
 
         let index = $(this).index();
@@ -114,8 +138,8 @@ $(document).ready(function() {
 
         let month_data = prayerTimes[index];
 
-        let table = document.createElement("TBODY");
-
+        let table = $("#monthData");
+        table.html("");
         
         for(let i = 0; i < month_data.length; i++) {
             let tr = document.createElement("TR");
@@ -133,7 +157,6 @@ $(document).ready(function() {
             }
             table.append(tr);
         }
-        $("#table").append(table);
     })
 
     // Send data to App Script
@@ -151,11 +174,6 @@ $(document).ready(function() {
     //     }).catch(function (error) {
     //         console.error(error);
     // });
-
-    $("#calendar").click(function() {
-        $("#day").addClass("hidden");
-        $("#main").removeClass("hidden");
-    })
 
     const prayerTimes = [
         [
